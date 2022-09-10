@@ -1,6 +1,6 @@
 <template>
 	<v-layout fill-height justify-center align-center class="login">
-		<v-flex xs12 sm8 md6 lg4 class="px-2">
+		<v-flex xs12 sm8 md6 lg4 class="px-2" style="max-width: 500px; margin: auto">
 			<v-card class="login-area" elevation="5">
 				<div class="login-title">LET'S DO IT!</div>
 				<v-form :disabled="loading" ref="refFormLogin" @submit.prevent="()=>{}">

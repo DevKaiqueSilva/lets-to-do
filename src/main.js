@@ -4,6 +4,11 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store/index';
 import vuetify from './plugins/vuetify';
+import VueApexCharts from 'vue-apexcharts';
+
+Vue.use(VueApexCharts);
+
+Vue.component('apexchart', VueApexCharts);
 
 if (process.env.NODE_ENV === 'development') {
   const { worker } = require('./mocks/browser')

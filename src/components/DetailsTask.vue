@@ -3,24 +3,24 @@
     v-model="visible" :fullscreen="$vuetify.breakpoint.smAndDown" 
     persistent scrollable max-width="500"
   >
-    <v-card>
+    <v-card v-if="visible">
       <v-card-title primary-title>
         {{isEdit ? 'Edição' : 'Nova'}} Tarefa
       </v-card-title>
       <v-card-text>
         <v-form ref="refFormTask" @submit.prevent="()=>{}">
           <v-layout wrap class="pt-3">
-            <v-flex xs12 md6 class="pr-1 mb-2">
+            <v-flex xs6 class="pr-1 mb-2">
               <v-select 
-                v-model="detailsTemp.listId" :items="lists" 
+                v-model="detailsTemp.listId" :items="lists" label="Lista"
                 item-text="list" item-value="listId" outlined 
-                dense hide-details @change="onChangeList" :rules="[rules.required]"
+                dense hide-details @change="onChangeList" 
               />
             </v-flex>
-            <v-flex xs12 md6 class="pl-1 mb-2">
+            <v-flex xs6 class="pl-1 mb-2">
               <v-text-field 
                 v-model="detailsTemp.list" outlined dense hide-details
-                label="Lista" :disabled="detailsTemp.listId > 0" 
+                :disabled="detailsTemp.listId > 0" 
                 placeholder="Digite aqui o nome da lista" :rules="[rules.required]"
               />
             </v-flex>
@@ -41,10 +41,38 @@
             </v-flex>
             <v-flex xs12 class="mb-2">
               <v-layout align-center>
+                <b>Tarefa criada em</b>
+                <v-spacer/>
+                <div style="width:150px" class="mx-2">
+                  <DatePickerMenu 
+                    :date="detailsTemp.createdAt" outlined dense hideDetails 
+                    @resetarDate="detailsTemp.createdAt=$event"
+                  />
+                </div>
+                <div style="width:100px">
+                  <TimePickerMenu 
+                    :time="detailsTemp.createdAtTime" outlined dense hideDetails
+                    @resetTime="detailsTemp.createdAtTime=$event"
+                  />
+                </div>
+              </v-layout>
+            </v-flex>
+            <v-flex xs12 class="mb-2">
+              <v-layout align-center>
                 <b>Deseja adicionar um prazo?</b>
                 <v-spacer/>
-                <div style="width:150px" class="mx-2"><DatePickerMenu :date="detailsTemp.planned" outlined dense hideDetails /></div>
-                <div style="width:100px"><TimePickerMenu :time="detailsTemp.plannedTime" outlined dense hideDetails/></div>
+                <div style="width:150px" class="mx-2">
+                  <DatePickerMenu 
+                    :date="detailsTemp.planned" outlined dense hideDetails 
+                    @resetarDate="detailsTemp.planned=$event"
+                  />
+                </div>
+                <div style="width:100px">
+                  <TimePickerMenu 
+                    :time="detailsTemp.plannedTime" outlined dense hideDetails
+                    @resetTime="detailsTemp.plannedTime=$event"
+                  />
+                </div>
               </v-layout>
             </v-flex>
             <v-flex xs12 class="mb-2">
@@ -59,13 +87,13 @@
                 tick-size="4"
               />
             </v-flex>
-            <v-flex xs12 md6 class="mb-2">
+            <v-flex xs6 class="mb-2">
               <v-switch 
                 v-model="detailsTemp.completed" label="Realizado" color="green" 
                 prepend-icon="mdi-check-bold" inset hide-details
               />
             </v-flex>
-            <v-flex xs12 md6 class="mb-2">
+            <v-flex xs6 class="mb-2">
               <v-switch 
                 v-model="detailsTemp.favorite" label="Favorito" color="amber" 
                 prepend-icon="mdi-star" inset hide-details
@@ -95,6 +123,8 @@
 <script>
 import DatePickerMenu from './UI/DatePickerMenu.vue';
 import TimePickerMenu from './UI/TimePickerMenu.vue';
+import moment from "moment";
+
 export default {
   props: {
       visible: {
@@ -123,9 +153,30 @@ export default {
   methods:{
     onSave(){
       if(this.$refs.refFormTask.validate()){
-        let task = {
-          
-        };
+        if(this.detailsTemp.listId == 0){
+          this.detailsTemp.listId = this.$store.getters["lists"].length+1;
+          this.$store.dispatch("addList", {
+            id: this.detailsTemp.listId,
+            title: this.detailsTemp.list
+          });
+        }
+        this.$store.dispatch("saveTask", {
+          id: this.isEdit ? this.details.id : null,
+          listId: this.detailsTemp.listId,
+          title: this.detailsTemp.title,
+          completed: this.detailsTemp.completed,
+          planned: this.detailsTemp.planned ? `${this.detailsTemp.planned}T${this.detailsTemp.plannedTime ? this.detailsTemp.plannedTime : "00:00"}` : null,
+          favorite: this.detailsTemp.favorite,
+          priority: this.detailsTemp.priority,
+          description: this.detailsTemp.description,
+          createdAt: this.detailsTemp.createdAt ? `${this.detailsTemp.createdAt}T${this.detailsTemp.createdAtTime ? this.detailsTemp.createdAtTime : "00:00"}` : null,
+        });
+        this.$store.dispatch("setSnackbar", {
+          visible: true,
+          text: "Tarefa salva com sucesso.",
+          color: "green"
+        });
+        this.$emit("close");
       }else{
         this.$store.dispatch("setSnackbar", {
           visible: true,
@@ -135,7 +186,6 @@ export default {
       }
     },  
     onChangeList(e){
-      console.log(e);
       if(e==0){
         this.detailsTemp.list = "";
       }else{
@@ -145,15 +195,17 @@ export default {
     },
     init(){
       this.detailsTemp = {
-        listId: 0,
-        list: "",
-        title: "",
-        description: "",
-        completed: false,
-        favorite: false,
-        planned: null,
-        plannedTime: null,
-        priority: 0
+        listId: this.isEdit ? this.details.listId : 0,
+        list: this.isEdit ? this.details.list : "",
+        title: this.isEdit ? this.details.title : "",
+        description: this.isEdit ? this.details.description : "",
+        completed: this.isEdit ? this.details.completed : false,
+        favorite: this.isEdit ? this.details.favorite : false,
+        planned: this.isEdit && this.details.planned ? this.details.planned.substring(0,10) : null,
+        plannedTime: this.isEdit && this.details.planned ? this.details.planned.substring(11,16) : null,
+        priority: this.isEdit ? this.details.priority : 0,
+        createdAt: this.isEdit && this.details.createdAt ? this.details.createdAt.substring(0,10) : moment().format().substring(0,10),
+        createdAtTime: this.isEdit && this.details.createdAt ? this.details.createdAt.substring(11,16) : moment().format().substring(11,16)
       }
     }
   },

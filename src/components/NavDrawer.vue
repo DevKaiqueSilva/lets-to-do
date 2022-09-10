@@ -1,5 +1,8 @@
 <template>
-  <v-navigation-drawer absolute permanent color="color1" dark app>
+  <v-navigation-drawer 
+    :value="visible" absolute :permanent="$vuetify.breakpoint.mdAndUp" 
+    color="color1" dark app @input="onInputDrawer"
+  >
     <template v-slot:prepend>
       <div class="title-logo">Let's Do It!</div>
       <v-divider></v-divider>
@@ -26,8 +29,9 @@
     <v-divider></v-divider>
     <v-list dense class="px-1">
       <v-list-item
-        v-for="(item,i) in options"
-        :key="`opt-${i}`" :class="item.show ? 'list-selected' : ''"
+        v-for="(item,i) in options" :key="`opt-${i}`" 
+        :class="item.show ? 'list-opc-selected' : 'list-opc'"
+        @click="$store.dispatch('setFilterIndex', i)"
       >
         <v-list-item-icon>
           <v-icon>{{ item.icon }}</v-icon>
@@ -43,9 +47,9 @@
     <v-divider></v-divider>
     <v-list dense class="pa-1 mt-1">
       <v-list-item
-        v-for="(item,i) in lists"
-        :key="`opt-${i}`"
-        :class="item.show ? 'list-selected' : ''"
+        v-for="(item,i) in lists" :key="`opt-${i}`" class="mb-2"
+        :class="item.show ? 'list-opc-selected' : 'list-opc'"
+        @click="$store.dispatch('showList', i)"
       >
         <v-list-item-icon>
           <v-icon class="mt-2">mdi-order-bool-ascending-variant</v-icon>
@@ -69,9 +73,16 @@
 
 <script>
 export default {
-  data(){
-    return{
-      filterIndex: 0
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    onInputDrawer(e){
+      console.log("drwaer", e);
+      this.$emit('drawer', e);
     }
   },
   computed: {
@@ -89,8 +100,8 @@ export default {
     },
     allTasks(){
       let tasks = [];
-      if(this.lists.length > 0){
-        this.lists.forEach(l=>{
+      if(this.listsFiltered.length > 0){
+        this.listsFiltered.forEach(l=>{
           if(l.tasks.length > 0){
             tasks = tasks.concat(l.tasks);
           }
@@ -100,6 +111,12 @@ export default {
     },
     lists(){
       return this.$store.getters["lists"];
+    },
+    listsFiltered(){
+      return this.$store.getters["lists"].filter(l=>(l.show==true));
+    },
+    filterIndex(){
+      return this.$store.getters["filterIndex"];
     }
   }
 }
@@ -112,7 +129,10 @@ export default {
   font-size: 2.5rem
   -webkit-text-stroke: 1px white
   text-align: center
-.list-selected
-  background-color: var(--v-color2-base) !important
-  border-radius: 5px
+.list-opc
+  cursor: pointer !important
+  &-selected
+    @extend .list-opc
+    background-color: var(--v-color2-base) !important
+    border-radius: 5px
 </style>

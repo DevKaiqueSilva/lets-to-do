@@ -1,5 +1,8 @@
 <template>
-  <v-app-bar elevation="4" color="color1" dark height="60">
+  <v-app-bar elevation="4" color="color1" dark height="60" style="flex-grow:0">
+    <v-btn v-if="$vuetify.breakpoint.smAndDown" small icon class="mr-3" @click="$emit('drawer')">
+      <v-icon>mdi-menu</v-icon>
+    </v-btn>
     <div v-if="$vuetify.breakpoint.smAndDown" class="title-logo">Let's Do It!</div>
     <v-spacer/>
     <v-switch 
