@@ -1,10 +1,13 @@
 <template>
   <v-app id="myapp">
     <Snackbar/>
-    <NavBar v-if="$vuetify.breakpoint.smAndDown && $route.path.includes('/login')==false" @drawer="showDrawer=!showDrawer"/>
-    <NavDrawer 
-      :visible="showDrawer || $vuetify.breakpoint.mdAndUp" 
-      v-if="$route.path.includes('/login')==false" 
+    <NavBar 
+      v-if="$vuetify.breakpoint.smAndDown && $route.path.includes('/login')==false" 
+      @drawer="showDrawer=!showDrawer"
+    />
+    <NavDrawer
+      :visible="showDrawer || $vuetify.breakpoint.mdAndUp"
+      v-if="$route.path.includes('/login')==false"
       @drawer="showDrawer=$event"
     />
     <v-main>
@@ -19,12 +22,12 @@ import NavDrawer from './components/NavDrawer.vue';
 import NavBar from './components/NavBar.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   data: () => ({
-    showDrawer: false
+    showDrawer: false,
   //
   }),
-  components: { Snackbar, NavDrawer, NavBar }
+  components: { Snackbar, NavDrawer, NavBar },
 };
 </script>
 

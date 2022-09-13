@@ -34,7 +34,8 @@
   </v-menu>
 </template>
 <script>
-import { mask } from "vue-the-mask";
+import { mask } from 'vue-the-mask';
+
 export default {
   directives: {
     mask,
@@ -42,101 +43,98 @@ export default {
   props: {
     date: {
       type: String,
-      default: ""
+      default: '',
     },
     backgroundColor: {
       type: String,
-      default: "transparent"
+      default: 'transparent',
     },
     outlined: {
       type: Boolean,
-      default: false
+      default: false,
     },
     color: {
       type: String,
-      default: "blue"
+      default: 'blue',
     },
     label: {
       type: String,
-      default: ""
+      default: '',
     },
     rules: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     dense: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hideDetails: {
-      type: Boolean, 
-      default: false
-    }
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       menu: false,
-      dateBR: "",
-      dateEU: "",
+      dateBR: '',
+      dateEU: '',
     };
   },
   created() {
     this.onInit();
   },
-  watch:{
-    date(){
+  watch: {
+    date() {
       // console.log(this.date);
-      if(this.watch==true){
+      if (this.watch == true) {
         this.onInit();
       }
-    }
+    },
   },
   methods: {
-    onInit(){
+    onInit() {
       this.dateEU = this.date;
-      if (!!this.date) {
+      if (this.date) {
         this.dateBR = this.dateFormated(this.date);
-      }else{
-        this.dateBR = "";
+      } else {
+        this.dateBR = '';
       }
     },
     changeDate() {
-      let date = this.dateEU;
-      this.$emit("resetarDate", date);
+      const date = this.dateEU;
+      this.$emit('resetarDate', date);
       this.dateBR = this.dateFormated(date);
     },
     changeText() {
       if (this.dateBR.length == 10) {
-        this.dateEU = this.dateBR.split("/").reverse().join("-");
-        let date = this.dateEU;
-        this.$emit("resetarDate", date);
+        this.dateEU = this.dateBR.split('/').reverse().join('-');
+        const date = this.dateEU;
+        this.$emit('resetarDate', date);
       }
     },
     dateFormated(date) {
-      if(!!this.range){
-        if(date[0]!=null){
-          let dateBR = [];
-          date.forEach(item=>{
-            dateBR.push(item.split("-").reverse().join("/"));
+      if (this.range) {
+        if (date[0] != null) {
+          const dateBR = [];
+          date.forEach((item) => {
+            dateBR.push(item.split('-').reverse().join('/'));
           });
-          return dateBR.join(" ~ ");
-        }else{
-          return "";
+          return dateBR.join(' ~ ');
         }
-      }else{
-        if (date.length == 10 || date.length == 7) {
-          return date.split("-").reverse().join("/");
-        } else {
-          return date;
-        }
+        return '';
       }
+      if (date.length == 10 || date.length == 7) {
+        return date.split('-').reverse().join('/');
+      }
+      return date;
     },
     onFocus() {},
   },
   computed: {
-    maskFilter(){
-      return !!this.range?'##/##/#### ~ ##/##/####':(this.type=='month'?'##/####':'##/##/####');
-    }
+    maskFilter() {
+      return this.range ? '##/##/#### ~ ##/##/####' : (this.type == 'month' ? '##/####' : '##/##/####');
+    },
   },
 };
 </script>

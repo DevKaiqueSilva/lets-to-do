@@ -1,6 +1,6 @@
 <template>
-  <v-navigation-drawer 
-    :value="visible" absolute :permanent="$vuetify.breakpoint.mdAndUp" 
+  <v-navigation-drawer
+    :value="visible" absolute :permanent="$vuetify.breakpoint.mdAndUp"
     color="color1" dark app @input="onInputDrawer"
   >
     <template v-slot:prepend>
@@ -13,7 +13,7 @@
         <v-list-item-content>
           <v-list-item-title>Kaique Silva</v-list-item-title>
           <v-list-item-subtitle>
-            <v-progress-linear 
+            <v-progress-linear
               class="mt-2" color="green" height="15" style="border-radius: 5px"
               :value="(allTasks.filter(t=>(t.completed)).length/allTasks.length)*100"
             />
@@ -29,7 +29,7 @@
     <v-divider></v-divider>
     <v-list dense class="px-1">
       <v-list-item
-        v-for="(item,i) in options" :key="`opt-${i}`" 
+        v-for="(item,i) in options" :key="`opt-${i}`"
         :class="item.show ? 'list-opc-selected' : 'list-opc'"
         @click="$store.dispatch('setFilterIndex', i)"
       >
@@ -76,50 +76,50 @@ export default {
   props: {
     visible: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
-    onInputDrawer(e){
-      console.log("drwaer", e);
+    onInputDrawer(e) {
+      console.log('drwaer', e);
       this.$emit('drawer', e);
-    }
+    },
   },
   computed: {
-    options(){
+    options() {
       return [
-        { icon: "mdi-apps", title: "Todos", qtd: this.allTasks.length },
-        { icon: "mdi-star", title: "Importantes", qtd: this.allTasks.filter(t=>(t.favorite)).length },
-        { icon: "mdi-calendar", title: "Agendados", qtd: this.allTasks.filter(t=>(!!t.planned)).length },
-        { icon: "mdi-clock-time-five-outline", title: "Pendentes", qtd: this.allTasks.filter(t=>(t.completed==false)).length },
-        { icon: "mdi-check-circle", title: "Completos", qtd: this.allTasks.filter(t=>(t.completed == true)).length }
-      ].map((o,i)=>({
+        { icon: 'mdi-apps', title: 'Todos', qtd: this.allTasks.length },
+        { icon: 'mdi-star', title: 'Importantes', qtd: this.allTasks.filter((t) => (t.favorite)).length },
+        { icon: 'mdi-calendar', title: 'Agendados', qtd: this.allTasks.filter((t) => (!!t.planned)).length },
+        { icon: 'mdi-clock-time-five-outline', title: 'Pendentes', qtd: this.allTasks.filter((t) => (t.completed == false)).length },
+        { icon: 'mdi-check-circle', title: 'Completos', qtd: this.allTasks.filter((t) => (t.completed == true)).length },
+      ].map((o, i) => ({
         ...o,
-        show: this.filterIndex == i
+        show: this.filterIndex == i,
       }));
     },
-    allTasks(){
+    allTasks() {
       let tasks = [];
-      if(this.listsFiltered.length > 0){
-        this.listsFiltered.forEach(l=>{
-          if(l.tasks.length > 0){
+      if (this.listsFiltered.length > 0) {
+        this.listsFiltered.forEach((l) => {
+          if (l.tasks.length > 0) {
             tasks = tasks.concat(l.tasks);
           }
         });
       }
       return tasks;
     },
-    lists(){
-      return this.$store.getters["lists"];
+    lists() {
+      return this.$store.getters.lists;
     },
-    listsFiltered(){
-      return this.$store.getters["lists"].filter(l=>(l.show==true));
+    listsFiltered() {
+      return this.$store.getters.lists.filter((l) => (l.show == true));
     },
-    filterIndex(){
-      return this.$store.getters["filterIndex"];
-    }
-  }
-}
+    filterIndex() {
+      return this.$store.getters.filterIndex;
+    },
+  },
+};
 </script>
 
 <style lang="sass" scoped>

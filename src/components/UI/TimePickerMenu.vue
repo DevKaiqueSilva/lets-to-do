@@ -31,33 +31,33 @@ export default {
   props: {
     time: {
       type: String,
-      default: ""
+      default: '',
     },
     label: {
       type: String,
-      default: ""
+      default: '',
     },
     outlined: {
       type: Boolean,
-      default: false
+      default: false,
     },
     rules: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     hideDetails: {
       type: Boolean,
-      default: false
+      default: false,
     },
     dense: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       menu2: false,
-      time2: ""
+      time2: '',
     };
   },
   created() {
@@ -66,9 +66,9 @@ export default {
   methods: {
     changeTime() {
       console.log(this.time2);
-      this.$emit("resetTime", this.time2);
-      this.$refs.menu.save(this.time2)
-    }
-  }
+      this.$emit('resetTime', this.time2);
+      this.$refs.menu.save(this.time2);
+    },
+  },
 };
 </script>

@@ -15,9 +15,10 @@
 - Vuex
 - Vue Router
 - Vuetify
-- Jest
-- Mock Service Worker
 - Apex Charts
+- Mock Service Worker
+- Testes Unitários Jest
+- Testes de interface com WebDrive.io
 
 <h2>▶️ Como executar o projeto</h2>
 

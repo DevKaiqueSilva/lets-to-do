@@ -20,13 +20,13 @@
       </v-flex>
     </v-layout>
     <v-layout wrap>
-      <v-flex 
-        v-for="(task, i) in list.tasks" :key="`task-${i}`" 
+      <v-flex
+        v-for="(task, i) in list.tasks" :key="`task-${i}`"
         xs12 md6 xl4 class="pa-1"
       >
-        <Task 
+        <Task
           :task="task" :list="list"
-          @edit="$emit('editTask', task)" 
+          @edit="$emit('editTask', task)"
           @delete="$emit('deleteTask', task)"
         />
       </v-flex>
@@ -54,34 +54,35 @@
 
 <script>
 import Task from './Task.vue';
+
 export default {
-    props: {
-      list: {
-        type: Object,
-        required: true
-      }
+  props: {
+    list: {
+      type: Object,
+      required: true,
     },
-    data(){
-      return{
-        listEdit: "",
-        showEdit: false
-      }
+  },
+  data() {
+    return {
+      listEdit: '',
+      showEdit: false,
+    };
+  },
+  components: { Task },
+  methods: {
+    onSaveEditList() {
+      this.$store.dispatch('changeListTitle', { id: this.list.id, title: this.listEdit });
+      this.showEdit = false;
     },
-    components: { Task },
-    methods: {
-      onSaveEditList(){
-        this.$store.dispatch("changeListTitle", { id: this.list.id, title: this.listEdit });
-        this.showEdit = false;
-      },
-      onEditList(){
-        this.listEdit = this.list.title;
-        this.showEdit = true;
-      }
+    onEditList() {
+      this.listEdit = this.list.title;
+      this.showEdit = true;
     },
-    computed: {
-      tasksCompleted() {
-        return this.list.tasks.filter(t => (t.completed)).length;
-      }
-    }
-}
+  },
+  computed: {
+    tasksCompleted() {
+      return this.list.tasks.filter((t) => (t.completed)).length;
+    },
+  },
+};
 </script>

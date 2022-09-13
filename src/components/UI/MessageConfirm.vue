@@ -21,17 +21,17 @@
 
 <script>
 export default {
-  data(){
-    return{
+  data() {
+    return {
       visible: false,
-      message: ""
-    }
+      message: '',
+    };
   },
-  methods:{
-    show(message){
+  methods: {
+    show(message) {
       this.message = message;
       this.visible = true;
-    } 
-  }
-}
+    },
+  },
+};
 </script>

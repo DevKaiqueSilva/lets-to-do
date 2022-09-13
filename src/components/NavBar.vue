@@ -5,7 +5,7 @@
     </v-btn>
     <div v-if="$vuetify.breakpoint.smAndDown" class="title-logo">Let's Do It!</div>
     <v-spacer/>
-    <v-switch 
+    <v-switch
       v-model="isLight" inset  color="amber" hide-details dark
       :prepend-icon="`mdi-${isLight == false ? 'weather-night' : 'white-balance-sunny'}`"
     />
@@ -17,28 +17,28 @@
 
 <script>
 export default {
-  data(){
-    return{
-      isLight: true
-    }
+  data() {
+    return {
+      isLight: true,
+    };
   },
   methods: {
-    onLogout(){
-      localStorage.removeItem("logged");
-      localStorage.removeItem("keepConected");
-      this.$router.push("/login");
-    }
+    onLogout() {
+      localStorage.removeItem('logged');
+      localStorage.removeItem('keepConected');
+      this.$router.push('/login');
+    },
   },
   watch: {
-    isLight(v){
+    isLight(v) {
       this.$vuetify.theme.isDark = !v;
-    }
+    },
   },
-  created(){
+  created() {
     console.log(this.$vuetify);
     this.isLight = !this.$vuetify.theme.isDark;
-  }
-}
+  },
+};
 </script>
 
 <style lang="sass" scoped>

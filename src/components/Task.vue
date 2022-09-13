@@ -28,42 +28,42 @@
 </template>
 
 <script>
-import moment from "moment";
+import moment from 'moment';
 
 export default {
   props: {
     task: {
       type: Object,
-      required: true
+      required: true,
     },
     list: {
-      type: Object, 
-      required: true
-    }
+      type: Object,
+      required: true,
+    },
   },
   methods: {
-    onCompleted(e){
-      this.$store.dispatch("saveTask", Object.assign(this.task, {
+    onCompleted(e) {
+      this.$store.dispatch('saveTask', Object.assign(this.task, {
         listId: this.list.id,
         list: this.list.title,
-        completedDate: e == true ? moment().format().substring(0,16) : null
+        completedDate: e == true ? moment().format().substring(0, 16) : null,
       }));
     },
-    formatDateBr(date){
+    formatDateBr(date) {
       let dateBr = date;
-      if(date && date.length >= 10){
-        dateBr = date.substring(0,10).split("-").reverse().join("/");
-        if(date.length >= 16){
-          dateBr += ` ${date.substring(11,16)}`;
+      if (date && date.length >= 10) {
+        dateBr = date.substring(0, 10).split('-').reverse().join('/');
+        if (date.length >= 16) {
+          dateBr += ` ${date.substring(11, 16)}`;
         }
       }
       return dateBr;
     },
-    getPriorityColor(){
-      if(this.task.priority==1) return ""
-    }
-  }
-}
+    getPriorityColor() {
+      if (this.task.priority == 1) return '';
+    },
+  },
+};
 </script>
 
 <style lang="sass">

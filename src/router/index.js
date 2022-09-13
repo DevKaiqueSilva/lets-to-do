@@ -25,15 +25,13 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  let isLogged = localStorage.getItem("logged");
-  let isLoginRoute = to.path.includes("/login");
-  if(isLogged && isLogged == '1'){
-    if(isLoginRoute) next("/");
+  const isLogged = to.query && to.query.force == '1' ? '1' : localStorage.getItem('logged');
+  const isLoginRoute = to.path.includes('/login');
+  if (isLogged && isLogged == '1') {
+    if (isLoginRoute) next('/');
     else next();
-  }else{
-    if(isLoginRoute==false) next("/login") 
-    else next();
-  }
-})
+  } else if (isLoginRoute == false) next('/login');
+  else next();
+});
 
 export default router;
