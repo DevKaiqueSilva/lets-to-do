@@ -37,3 +37,5 @@ npm run dev
 npm run build
 # Realizar testes unitários
 npm run test:unit
+# Realizar testes de interface
+npm run test:e2e
