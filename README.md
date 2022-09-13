@@ -18,7 +18,7 @@
 - Apex Charts
 - Mock Service Worker
 - Testes Unitários Jest
-- Testes de interface com WebDrive.io
+- Testes de interface com WebDriver.io
 
 <h2>▶️ Como executar o projeto</h2>
 
